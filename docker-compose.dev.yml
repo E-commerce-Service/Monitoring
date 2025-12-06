@@ -6,7 +6,7 @@ services:
     networks:
       - shared_ecommerce_network
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus.dev.yml:/etc/prometheus/prometheus.dev.yml
 
   grafana:
     image: grafana/grafana:12.3.0-18147126998

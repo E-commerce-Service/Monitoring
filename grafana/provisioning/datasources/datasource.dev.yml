@@ -5,6 +5,6 @@ datasources:
     type: prometheus
     access: proxy
     orgId: 1
-    url: ${PROMETHEUS_URL}
+    url: http://prometheus:9090
     isDefault: true
     editable: true

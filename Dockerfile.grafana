@@ -1,8 +1,7 @@
-FROM grafana/grafana:12.3.0-18147126998
+FROM grafana/grafana:12.3.0
 
 ENV GF_AUTH_ANONYMOUS_ENABLED=true
 ENV GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
 
 COPY grafana/provisioning /etc/grafana/provisioning
-
 COPY grafana/provisioning/dashboards/json /var/lib/grafana/dashboards
