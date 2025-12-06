@@ -1,23 +1,26 @@
 services:
   prometheus:
-    image: prom/prometheus:v3.6.0
+    image: wesley00s/prometheus-ecommerce:latest
     ports:
       - "9090:9090"
     networks:
       - shared_ecommerce_network
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
 
   grafana:
-    image: grafana/grafana:12.3.0-18147126998
+    image: wesley00s/grafana-ecommerce:latest
     ports:
       - "3000:3000"
     networks:
       - shared_ecommerce_network
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/provisioning/dashboards/json:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
 
 networks:
   shared_ecommerce_network:
     external: true
+
+volumes:
+  prometheus_data:
+  grafana_data:
