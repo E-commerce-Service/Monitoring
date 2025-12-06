@@ -1,0 +1,45 @@
+name: Monitoring Stack CI/CD
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  PROM_IMAGE: wesley00s/prometheus-ecommerce
+  GRAF_IMAGE: wesley00s/grafana-ecommerce
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Prometheus
+        run: docker build -f Dockerfile.prometheus -t $PROM_IMAGE:${{ github.sha }} .
+
+      - name: Push Prometheus
+        if: github.event_name != 'pull_request'
+        run: |
+          docker tag $PROM_IMAGE:${{ github.sha }} $PROM_IMAGE:latest
+          docker push $PROM_IMAGE:${{ github.sha }}
+          docker push $PROM_IMAGE:latest
+
+      - name: Build Grafana
+        run: docker build -f Dockerfile.grafana -t $GRAF_IMAGE:${{ github.sha }} .
+
+      - name: Push Grafana
+        if: github.event_name != 'pull_request'
+        run: |
+          docker tag $GRAF_IMAGE:${{ github.sha }} $GRAF_IMAGE:latest
+          docker push $GRAF_IMAGE:${{ github.sha }}
+          docker push $GRAF_IMAGE:latest
